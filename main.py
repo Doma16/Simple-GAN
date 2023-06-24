@@ -35,6 +35,7 @@ class Discriminator(nn.Module):
     def __init__(self, in_channels) -> None:
         super().__init__()
         self.disc1 = nn.Sequential(
+            nn.Dropout2d(),
             BNReLUConv(in_channels,32,stride=1),
             BNReLUConv(32,64,stride=1),
             BNReLUConv(64,64,stride=2),
@@ -76,7 +77,7 @@ class Generator(nn.Module):
         y = self.gen1(x)
         y = torch.mean(y,dim=(1))
         y = y.view(y.shape[0],1,28,28)
-        
+        y = torch.relu(y)
 
         #y = (y - torch.min(y))#/(torch.max(y) - torch.min(y))
         #y = torch.tanh(y)
